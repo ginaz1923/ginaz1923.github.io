@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.10" tiledversion="1.10.1" orientation="orthogonal" renderorder="right-down" width="8" height="5" tilewidth="198" tileheight="144" infinite="0" nextlayerid="3" nextobjectid="9">
+ <tileset firstgid="1" source="0-1.tsx"/>
+ <layer id="1" name="Tile Layer 1" width="8" height="5">
+  <data encoding="csv">
+1,2,3,4,5,6,7,8,
+9,10,11,12,13,14,15,16,
+17,18,19,20,21,22,23,24,
+25,26,27,28,29,30,31,32,
+33,34,35,36,37,38,39,40
+</data>
+ </layer>
+ <objectgroup id="2" name="Object Layer 1">
+  <object id="2" name="BlueBox" x="26.5129" y="167.915" width="190.009" height="120.781">
+   <properties>
+    <property name="Spawn Player Here" value=""/>
+   </properties>
+  </object>
+  <object id="3" name="RedBox" x="1571.63" y="304.899" width="11.7835" height="122.254">
+   <properties>
+    <property name="Spawn Enemies Here" value=""/>
+   </properties>
+  </object>
+  <object id="5" x="193.333" y="-2.66667" width="1389.33" height="169.333"/>
+  <object id="6" x="190.667" y="430.667" width="1393.33" height="288"/>
+  <object id="7" x="792" y="285.333" width="198.667" height="152"/>
+  <object id="8" x="396" y="144" width="205.333" height="165.333"/>
+ </objectgroup>
+</map>
