@@ -8,34 +8,54 @@
 //         alert("Your browser does not support HTML5 canvas.");
 //         return;
 //     }
-//     me.loader.load({ name : "tileset.png", type: "image",    src:"map/tileset.png"})
-//     me.loader.load({ name : "0-1",   type: "tmx",   src:"map/0-1.tmx"})
-//     // me.game.world.addChild(new me.ColorLayer("background", "#202020"));
 // });
 
 
 var canvas = document.querySelector('canvas');
 var c = canvas.getContext('2d');
 
-canvas.width = 1920
-canvas.height = 1080
+canvas.width = 1600
+canvas.height = 930
 
 c.fillRect(0, 0, canvas.width, canvas.height)
 
-var gravity = 0.05
+var gravity = 0.1
 
 class Sprite {
-    constructor({position,velocity}){
+    constructor({position,velocity, color = 'red'}){
         this.position = position
         this.velocity = velocity
+        this.width = 50
         this.height = 150
+        this.lastPressed
+
+        this.attackRange = {
+            position: this.position,
+            width: 100,
+            height: 50
+        }
+        this.color = color
+        this.isAttacking
+
     }
 
+    //sprite replacements with shapes
     draw(){
-        c.fillStyle = 'red'
-        c.fillRect(this.position.x, this.position.y, 50, this.height)
+        //sprite (player)
+        c.fillStyle = this.color
+        c.fillRect(this.position.x, this.position.y, this.width, this.height)
+
+        //attack range
+        c.fillStyle = 'green'
+        c.fillRect(
+            this.attackRange.position.x,
+            this.attackRange.position.y,
+            this.attackRange.width,
+            this.attackRange.height
+        )
     }
 
+    //sprite movement management
     update(){
         this.draw()
         //moves the sprites by adding the velocity value to the position
@@ -49,8 +69,18 @@ class Sprite {
         else {
             this.velocity.y += gravity
         }
+
+    }
+
+    //registers attacks
+    attack(){
+        this.isAttacking = true
+        setTimeout(() => {
+            this.isAttacking = false
+        }, 100)
     }
 }
+
 
 //amiya
 var amiya = new Sprite({
@@ -75,7 +105,8 @@ var reunion = new Sprite({
     velocity: {
         x: 0,
         y: 0
-    }
+    },
+    color: 'blue'
 })
 
 
@@ -89,8 +120,6 @@ var key = {
 
 }
 
-//defines the last key that was pressed so if both were pressed down, it will move depending on the last one pressed
-var lastPressed
 
 function animate(){
     window.requestAnimationFrame(animate)
@@ -99,14 +128,24 @@ function animate(){
     amiya.update()
     reunion.update()
 
+
     amiya.velocity.x = 0
 
     //when a or d is pressed, move left or right
-    if(key.a.pressed && lastPressed === 'a'){
-        amiya.velocity.x = -0.5
+    if(key.a.pressed && amiya.lastPressed === 'a'){
+        amiya.velocity.x = -1
     }
-    else if(key.d.pressed && lastPressed === 'd'){
-        amiya.velocity.x = 0.5
+    else if(key.d.pressed && amiya.lastPressed === 'd'){
+        amiya.velocity.x = 1
+    }
+
+    //Hit register
+    if(amiya.attackRange.position.x + amiya.attackRange.width >= reunion.position.x
+        && amiya.attackRange.position.x <= reunion.position.x + reunion.width
+        && amiya.attackRange.position.y + amiya.attackRange.height >= reunion.position.y
+        && amiya.attackRange.position.y <= reunion.position.y + reunion.height
+        && amiya.isAttacking){
+        console.log("hit");
     }
 
 }
@@ -117,20 +156,26 @@ window.addEventListener('keydown', (event) => {
     switch(event.key){
         case 'd':
             key.d.pressed = true
-            lastPressed = 'd'
+            amiya.lastPressed = 'd'
             break
         case 'a':
             key.a.pressed = true
-            lastPressed = 'a'
+            amiya.lastPressed = 'a'
             break
         case ' ':
-            amiya.velocity.y = -5
+            amiya.velocity.y = -10
+            break
+        case 'w':
+            amiya.attack()
             break
     }
-    console.log(event.key);
 })
 
-//hen a key is lifted, movement is false and stop moving
+window.addEventListener("click", (event) => {
+
+})
+
+//when a key is lifted, movement is false and stop moving
 window.addEventListener('keyup', (event) => {
     switch(event.key){
         case 'd':
@@ -140,6 +185,7 @@ window.addEventListener('keyup', (event) => {
             key.a.pressed = false
             break
     }
-    console.log(event.key);
 })
+
+
 
