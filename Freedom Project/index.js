@@ -1,4 +1,4 @@
-// // import resources from './resources.js'
+// import resources from './resources.js'
 
 
 // // Black Screen Test
@@ -14,15 +14,15 @@
 var canvas = document.querySelector('canvas');
 var c = canvas.getContext('2d');
 
-canvas.width = 1600
-canvas.height = 930
+canvas.width = window.innerWidth - 5
+canvas.height = window.innerHeight - 7.25
 
 c.fillRect(0, 0, canvas.width, canvas.height)
 
-var gravity = 0.1
+var gravity = 0.5
 
 class Sprite {
-    constructor({position,velocity, color = 'red'}){
+    constructor({position, velocity, color = 'red', offset}){
         this.position = position
         this.velocity = velocity
         this.width = 50
@@ -30,7 +30,11 @@ class Sprite {
         this.lastPressed
 
         this.attackRange = {
-            position: this.position,
+            position: {
+                x: this.position.x,
+                y: this.position.y
+            },
+            offset,
             width: 100,
             height: 50
         }
@@ -46,18 +50,26 @@ class Sprite {
         c.fillRect(this.position.x, this.position.y, this.width, this.height)
 
         //attack range
-        c.fillStyle = 'green'
-        c.fillRect(
+        if (amiya.isAttacking) {
+            c.fillStyle = 'green'
+            c.fillRect(
             this.attackRange.position.x,
             this.attackRange.position.y,
             this.attackRange.width,
             this.attackRange.height
-        )
+            )
+        }
+
     }
 
     //sprite movement management
     update(){
         this.draw()
+
+        //the attack range position is attached to the sprites positions
+        this.attackRange.position.x = this.position.x + this.attackRange.offset.x
+        this.attackRange.position.y = this.position.y
+
         //moves the sprites by adding the velocity value to the position
         this.position.x += this.velocity.x
         this.position.y += this.velocity.y
@@ -91,6 +103,10 @@ var amiya = new Sprite({
     velocity: {
         x: 0,
         y: 0
+    },
+    offset: {
+        x: 0,
+        y: 0
     }
 })
 
@@ -106,7 +122,11 @@ var reunion = new Sprite({
         x: 0,
         y: 0
     },
-    color: 'blue'
+    color: 'blue',
+    offset: {
+        x: -50,
+        y: 0
+    }
 })
 
 
@@ -118,6 +138,20 @@ var key = {
         pressed: false
     }
 
+}
+
+
+//checks if there is an attack collision
+function collision({
+    rectangle1,
+    rectangle2
+}){
+    return(
+        rectangle1.attackRange.position.x + rectangle1.attackRange.width >= rectangle2.position.x
+        && rectangle1.attackRange.position.x <= rectangle2.position.x + rectangle2.width
+        && rectangle1.attackRange.position.y + rectangle1.attackRange.height >= rectangle2.position.y
+        && rectangle1.attackRange.position.y <= rectangle2.position.y + rectangle2.height
+    )
 }
 
 
@@ -133,19 +167,35 @@ function animate(){
 
     //when a or d is pressed, move left or right
     if(key.a.pressed && amiya.lastPressed === 'a'){
-        amiya.velocity.x = -1
+        amiya.velocity.x = -2
     }
     else if(key.d.pressed && amiya.lastPressed === 'd'){
-        amiya.velocity.x = 1
+        amiya.velocity.x = 2
     }
 
     //Hit register
-    if(amiya.attackRange.position.x + amiya.attackRange.width >= reunion.position.x
-        && amiya.attackRange.position.x <= reunion.position.x + reunion.width
-        && amiya.attackRange.position.y + amiya.attackRange.height >= reunion.position.y
-        && amiya.attackRange.position.y <= reunion.position.y + reunion.height
+    //If amiya hits enemy
+    if(
+        collision({
+            rectangle1 : amiya,
+            rectangle2 : reunion
+        })
         && amiya.isAttacking){
-        console.log("hit");
+        amiya.isAttacking = false
+        //decrease health bar when hit
+        document.querySelector('#amiya').style.width = '30%'
+        console.log("amiya hit");
+    }
+
+    //If enemy hits amiya
+    if(
+        collision({
+            rectangle1 : reunion,
+            rectangle2 : amiya
+        })
+        && reunion.isAttacking){
+        reunion.isAttacking = false
+        console.log("reunion hit");
     }
 
 }
@@ -154,24 +204,25 @@ animate()
 //if a key is pressed, movement is true
 window.addEventListener('keydown', (event) => {
     switch(event.key){
-        case 'd':
+        case 'd': //right
             key.d.pressed = true
             amiya.lastPressed = 'd'
             break
-        case 'a':
+        case 'a': //left
             key.a.pressed = true
             amiya.lastPressed = 'a'
             break
-        case ' ':
+        case ' ': //jump
             amiya.velocity.y = -10
-            break
-        case 'w':
-            amiya.attack()
             break
     }
 })
 
-window.addEventListener("click", (event) => {
+//Attack when mouse is clicked
+window.addEventListener('click', (event) => {
+     {
+        amiya.attack()
+     }
 
 })
 
