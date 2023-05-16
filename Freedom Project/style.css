@@ -3,7 +3,7 @@
 }
 
 canvas{
-    padding: 1px;
+    padding: 0.5px;
 }
 
 .fullcanvas {
@@ -32,11 +32,6 @@ canvas{
     flex-shrink: 0;
 }
 
-.reunionhp {
-    background-color : yellow;
-    height: 30px;
-    width: 100%;
-}
 
 .hpbg {
     position: absolute;

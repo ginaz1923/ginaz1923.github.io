@@ -115,7 +115,7 @@ var amiya = new Sprite({
 //reunion enemy
 var reunion = new Sprite({
     position:{
-        x: 400,
+        x: canvas.width * 3/4,
         y: 0
     },
     velocity: {
@@ -154,7 +154,6 @@ function collision({
     )
 }
 
-
 function animate(){
     window.requestAnimationFrame(animate)
     c.fillStyle = 'black'
@@ -162,15 +161,32 @@ function animate(){
     amiya.update()
     reunion.update()
 
+    if(reunion.position.y + reunion.height + reunion.velocity.y >= canvas.height){
+        reunion.velocity.y = 0
+        if(reunion.position.x > amiya.position.x + amiya.width){
+            reunion.position.x -=5;
+        }
+
+        if(reunion.position.x < amiya.position.x - amiya.width){
+            reunion.position.x += 5
+        }
+
+
+    }
+    else {
+        reunion.velocity.y += gravity
+    }
+
+
 
     amiya.velocity.x = 0
 
     //when a or d is pressed, move left or right
     if(key.a.pressed && amiya.lastPressed === 'a'){
-        amiya.velocity.x = -2
+        amiya.velocity.x = -10
     }
     else if(key.d.pressed && amiya.lastPressed === 'd'){
-        amiya.velocity.x = 2
+        amiya.velocity.x = 10
     }
 
     //Hit register
