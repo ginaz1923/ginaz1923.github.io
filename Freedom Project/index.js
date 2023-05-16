@@ -40,6 +40,7 @@ class Sprite {
         }
         this.color = color
         this.isAttacking
+        this.health = 100
 
     }
 
@@ -50,7 +51,17 @@ class Sprite {
         c.fillRect(this.position.x, this.position.y, this.width, this.height)
 
         //attack range
-        if (amiya.isAttacking) {
+        if(amiya.isAttacking) {
+            c.fillStyle = 'green'
+            c.fillRect(
+            this.attackRange.position.x,
+            this.attackRange.position.y,
+            this.attackRange.width,
+            this.attackRange.height
+            )
+        }
+
+        if(reunion.isAttacking){
             c.fillStyle = 'green'
             c.fillRect(
             this.attackRange.position.x,
@@ -81,7 +92,6 @@ class Sprite {
         else {
             this.velocity.y += gravity
         }
-
     }
 
     //registers attacks
@@ -89,8 +99,9 @@ class Sprite {
         this.isAttacking = true
         setTimeout(() => {
             this.isAttacking = false
-        }, 100)
+        }, 300)
     }
+
 }
 
 
@@ -105,7 +116,7 @@ var amiya = new Sprite({
         y: 0
     },
     offset: {
-        x: 0,
+        x: 1,
         y: 0
     }
 })
@@ -141,7 +152,7 @@ var key = {
 }
 
 
-//checks if there is an attack collision
+//checks if there is an attack hits a sprite
 function collision({
     rectangle1,
     rectangle2
@@ -161,17 +172,17 @@ function animate(){
     amiya.update()
     reunion.update()
 
+    //checks if reunion landed on the ground, then move it towards the player
     if(reunion.position.y + reunion.height + reunion.velocity.y >= canvas.height){
         reunion.velocity.y = 0
+        //enemy is to the right of the player
         if(reunion.position.x > amiya.position.x + amiya.width){
             reunion.position.x -=5;
         }
-
+        //enemy is to the left of the player
         if(reunion.position.x < amiya.position.x - amiya.width){
             reunion.position.x += 5
         }
-
-
     }
     else {
         reunion.velocity.y += gravity
@@ -189,7 +200,8 @@ function animate(){
         amiya.velocity.x = 10
     }
 
-    //Hit register
+//Hit register
+
     //If amiya hits enemy
     if(
         collision({
@@ -199,7 +211,7 @@ function animate(){
         && amiya.isAttacking){
         amiya.isAttacking = false
         //decrease health bar when hit
-        document.querySelector('#amiya').style.width = '30%'
+// reunion health decrease
         console.log("amiya hit");
     }
 
@@ -211,6 +223,8 @@ function animate(){
         })
         && reunion.isAttacking){
         reunion.isAttacking = false
+        amiya.health -=20
+        document.querySelector('#amiya').style.width = amiya.health + '%'
         console.log("reunion hit");
     }
 
@@ -231,6 +245,9 @@ window.addEventListener('keydown', (event) => {
         case ' ': //jump
             amiya.velocity.y = -10
             break
+        case 'w':
+            reunion.attack()
+            break
     }
 })
 
@@ -241,6 +258,7 @@ window.addEventListener('click', (event) => {
      }
 
 })
+
 
 //when a key is lifted, movement is false and stop moving
 window.addEventListener('keyup', (event) => {
@@ -253,6 +271,5 @@ window.addEventListener('keyup', (event) => {
             break
     }
 })
-
 
 
