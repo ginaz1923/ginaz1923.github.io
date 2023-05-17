@@ -54,22 +54,29 @@ class Sprite {
         if(amiya.isAttacking) {
             c.fillStyle = 'green'
             c.fillRect(
-            this.attackRange.position.x,
-            this.attackRange.position.y,
-            this.attackRange.width,
-            this.attackRange.height
+            amiya.attackRange.position.x,
+            amiya.attackRange.position.y,
+            amiya.attackRange.width,
+            amiya.attackRange.height
             )
         }
 
         if(reunion.isAttacking){
             c.fillStyle = 'green'
             c.fillRect(
-            this.attackRange.position.x,
-            this.attackRange.position.y,
-            this.attackRange.width,
-            this.attackRange.height
+            reunion.attackRange.position.x,
+            reunion.attackRange.position.y,
+            reunion.attackRange.width,
+            reunion.attackRange.height
             )
         }
+
+        //Enemy NPC Health Bar
+        c.fillStyle = 'red'
+        c.fillRect(reunion.position.x - 50 , reunion.position.y - 100, this.width * 3, 10)
+
+        c.fillStyle = 'green'
+        c.fillRect(reunion.position.x -50, reunion.position.y - 100, this.width *3 * reunion.health / 100, 10)
 
     }
 
@@ -165,6 +172,16 @@ function collision({
     )
 }
 
+function status(){
+    if(amiya.health = 0){
+
+        console.log("reunion wins")
+    }
+    if(reunion.health = 0){
+        console.log("amiya wins")
+    }
+}
+
 function animate(){
     window.requestAnimationFrame(animate)
     c.fillStyle = 'black'
@@ -188,6 +205,9 @@ function animate(){
         reunion.velocity.y += gravity
     }
 
+    if(reunion.attackRange.position.x <= amiya.position.x + 50){
+        reunion.attack()
+    }
 
 
     amiya.velocity.x = 0
@@ -210,8 +230,12 @@ function animate(){
         })
         && amiya.isAttacking){
         amiya.isAttacking = false
-        //decrease health bar when hit
-// reunion health decrease
+        reunion.health -=5
+        if(reunion.health <= 0){
+            reunion.health = 0
+            console.log("amiya wins")
+        }
+        console.log(reunion.health);
         console.log("amiya hit");
     }
 
@@ -223,9 +247,14 @@ function animate(){
         })
         && reunion.isAttacking){
         reunion.isAttacking = false
-        amiya.health -=20
+        amiya.health -=5
+
+        if(amiya.health <= 0){
+            amiya.health = 0
+            console.log("reunion wins")
+        }
         document.querySelector('#amiya').style.width = amiya.health + '%'
-        console.log("reunion hit");
+        // console.log("reunion hit");
     }
 
 }
@@ -245,9 +274,7 @@ window.addEventListener('keydown', (event) => {
         case ' ': //jump
             amiya.velocity.y = -10
             break
-        case 'w':
-            reunion.attack()
-            break
+
     }
 })
 
