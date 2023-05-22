@@ -174,10 +174,10 @@ var amiya = new Fighter({
     imageSrc:'./resources/characters/amiya/amiya_idle/char_002_amiya-0.png',
     framesMax: 13,
     scale: 5,
-    offset: {
-        x: 145,
-        y: 26
-    }
+    // offset: {
+    //     x: 145,
+    //     y: 26
+    // }
 })
 
 
