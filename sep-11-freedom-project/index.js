@@ -5,6 +5,9 @@ var c = canvas.getContext('2d');
 canvas.width = window.innerWidth - 5
 canvas.height = window.innerHeight - 7.25
 
+
+
+
 class Sprite {
     constructor({position, imageSrc, scale = 1, framesMax = 1, offset = {x: 0, y:0}}){
         this.position = position
@@ -12,8 +15,6 @@ class Sprite {
         this.height = 150
         this.image = new Image()
         this.image.src = imageSrc
-        this.scale = scale
-        this.framesMax = framesMax
         this.offset = offset
     }
 
@@ -33,16 +34,6 @@ class Sprite {
 
     update(){
         this.draw()
-        this.framesElapsed++
-
-        if(this.framesElapsed % this.framesHold === 0){
-            if (this.framesCurrent < this.framesMax - 1){
-                this.framesCurrent ++
-            }
-            else{
-                this.framesCurrent  = 0
-            }
-        }
     }
 
 }
@@ -147,16 +138,9 @@ class Fighter extends Sprite {
         }
 }
 
-//background
     c.fillRect(0, 0, canvas.width, canvas.height)
     var gravity = 0.5
-    var background = new Sprite({
-        position: {
-            x: 0,
-            y: 0
-        },
-        imageSrc:'./resources/map/chernobog.png'
-    })
+
 
 //amiya
 var amiya = new Fighter({
@@ -172,13 +156,6 @@ var amiya = new Fighter({
         x: 0,
         y: 0
     },
-    imageSrc:'./resources/characters/amiya/amiya_idle/char_002_amiya-0.png',
-    framesMax: 13,
-    scale: 5,
-    // offset: {
-    //     x: 145,
-    //     y: 26
-    // }
 })
 
 
@@ -229,7 +206,6 @@ function animate(){
     window.requestAnimationFrame(animate)
     c.fillStyle = 'black'
     c.fillRect(0, 0, canvas.width, canvas.height)
-    background.update()
 
     amiya.update()
     reunion.update()
@@ -264,9 +240,6 @@ function animate(){
     }
     else if(key.d.pressed && amiya.lastPressed === 'd' && amiya.health > 0){
         amiya.velocity.x = 10
-    }
-    if(amiya.health <= 0){
-        amiya
     }
 
 //Hit register
