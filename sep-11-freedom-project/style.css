@@ -1,0 +1,44 @@
+* {
+    box-sizing: border-box;
+    border: black;
+}
+
+canvas{
+    padding: 0.5px;
+}
+
+.fullcanvas {
+    position: relative;
+    /* display: inline-block; */
+}
+
+.healthbar {
+    position : absolute;
+    display: flex;
+    width: 100%;
+    align-items: center;
+    padding: 20px;
+}
+
+.amiyahp {
+    background-color : yellow;
+    height: 30px;
+    width: 100%;
+}
+
+.icon {
+    background-color: red;
+    width: 100px;
+    height: 100px;
+    flex-shrink: 0;
+}
+
+
+.hpbg {
+    position: absolute;
+    background: blue;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+}
