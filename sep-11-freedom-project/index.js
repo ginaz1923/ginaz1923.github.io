@@ -18,7 +18,8 @@ class Sprite {
     }
 
     draw(){
-        c.drawImage(this.image,
+        c.drawImage(
+            this.image,
             this.framesCurent * (this.image.width/this.framesMax),
             0,
             this.image.width/this.framesMax,
@@ -92,25 +93,25 @@ class Fighter extends Sprite {
         c.fillRect(reunion.position.x - 50, reunion.position.y - 150, this.width * 3 * reunion.health/100, 10)
 
         //attack range
-        if(amiya.isAttacking) {
-            c.fillStyle = 'green'
-            c.fillRect(
-            amiya.attackRange.position.x,
-            amiya.attackRange.position.y,
-            amiya.attackRange.width,
-            amiya.attackRange.height
-            )
-        }
+        // if(amiya.isAttacking) {
+        //     c.fillStyle = 'green'
+        //     c.fillRect(
+        //     amiya.attackRange.position.x,
+        //     amiya.attackRange.position.y,
+        //     amiya.attackRange.width,
+        //     amiya.attackRange.height
+        //     )
+        // }
 
-        if(reunion.isAttacking){
-            c.fillStyle = 'green'
-            c.fillRect(
-            reunion.attackRange.position.x,
-            reunion.attackRange.position.y,
-            reunion.attackRange.width,
-            reunion.attackRange.height
-            )
-        }
+        // if(reunion.isAttacking){
+        //     c.fillStyle = 'green'
+        //     c.fillRect(
+        //     reunion.attackRange.position.x,
+        //     reunion.attackRange.position.y,
+        //     reunion.attackRange.width,
+        //     reunion.attackRange.height
+        //     )
+        // }
 
     }
 
@@ -154,7 +155,7 @@ class Fighter extends Sprite {
             x: 0,
             y: 0
         },
-        imageSrc: './resources/map/chernobog.png'
+        imageSrc:'./resources/map/chernobog.png'
     })
 
 //amiya
@@ -237,31 +238,35 @@ function animate(){
     if(reunion.position.y + reunion.height + reunion.velocity.y >= canvas.height - 50){
         reunion.velocity.y = 0
         //enemy is to the right of the player
-        if(reunion.position.x > amiya.position.x + amiya.width){
+        if(reunion.position.x > amiya.position.x + amiya.width && reunion.health > 0){
             reunion.position.x -=5;
         }
         //enemy is to the left of the player
-        if(reunion.position.x < amiya.position.x - amiya.width){
+        if(reunion.position.x < amiya.position.x - amiya.width && reunion.health > 0){
             reunion.position.x += 5
         }
     }
     else {
         reunion.velocity.y += gravity
     }
-   
-        if(reunion.attackRange.position.x <= amiya.position.x + 50){
+
+        if(reunion.attackRange.position.x <= amiya.position.x + 50 && reunion.health > 0){
             reunion.attack()
          }
-    
+
 
     amiya.velocity.x = 0
 
+
     //when a or d is pressed, move left or right
-    if(key.a.pressed && amiya.lastPressed === 'a'){
+    if(key.a.pressed && amiya.lastPressed === 'a' && amiya.health > 0){
         amiya.velocity.x = -10
     }
-    else if(key.d.pressed && amiya.lastPressed === 'd'){
+    else if(key.d.pressed && amiya.lastPressed === 'd' && amiya.health > 0){
         amiya.velocity.x = 10
+    }
+    if(amiya.health <= 0){
+        amiya
     }
 
 //Hit register
@@ -306,6 +311,7 @@ function animate(){
 animate()
 
 //if a key is pressed, movement is true
+
 window.addEventListener('keydown', (event) => {
     switch(event.key){
         case 'd': //right
@@ -326,7 +332,10 @@ window.addEventListener('keydown', (event) => {
 //Attack when mouse is clicked
 window.addEventListener('click', (event) => {
      {
-        amiya.attack()
+        if(amiya.health > 0){
+            amiya.attack()
+        }
+
      }
 
 })
