@@ -248,12 +248,11 @@ function animate(){
     else {
         reunion.velocity.y += gravity
     }
-    setTimeout(() => {
+   
         if(reunion.attackRange.position.x <= amiya.position.x + 50){
             reunion.attack()
-            // console.log("yes")
          }
-    }, 1000)
+    
 
     amiya.velocity.x = 0
 
@@ -274,13 +273,14 @@ function animate(){
         })
         && amiya.isAttacking){
         amiya.isAttacking = false
-        reunion.health -=5
+        reunion.health -=10
         if(reunion.health <= 0){
             reunion.health = 0
+            document.querySelector('#displayText').innerHTML = 'Amiya Wins'
             console.log("amiya wins")
         }
-        console.log(reunion.health);
-        console.log("amiya hit");
+        // console.log(reunion.health);
+        // console.log("amiya hit");
     }
 
     //If enemy hits amiya
@@ -294,10 +294,11 @@ function animate(){
 
         if(amiya.health <= 0){
             amiya.health = 0
+            document.querySelector('#displayText').innerHTML = 'Reunion Wins'
         }
 
         document.querySelector('#amiya').style.width = amiya.health + '%'
-        console.log(amiya.health);
+        // console.log(amiya.health);
         // console.log("reunion hit");
     }
 
@@ -343,13 +344,3 @@ window.addEventListener('keyup', (event) => {
 })
 
 
-function status({amiya, reunion}){
-    if(amiya.health <= 0){
-        document.querySelector('#displayText').innerHTML = 'Reunion Wins'
-        console.log("reunion wins")
-    }
-    if(reunion.health <= 0){
-        document.querySelector('#displayText').innerHTML = 'Amiya Wins'
-        console.log("amiya wins")
-    }
-}
