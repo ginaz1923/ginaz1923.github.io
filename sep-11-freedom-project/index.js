@@ -210,7 +210,7 @@ var key = {
 
 }
 
-//checks if there is an attack hits a sprite
+// //checks if there is an attack hits a sprite
 function collision({
     rectangle1,
     rectangle2
@@ -248,10 +248,12 @@ function animate(){
     else {
         reunion.velocity.y += gravity
     }
-
-    if(reunion.attackRange.position.x <= amiya.position.x + 50){
-        reunion.isAttacking = true
-     }
+    setTimeout(() => {
+        if(reunion.attackRange.position.x <= amiya.position.x + 50){
+            reunion.attack()
+            // console.log("yes")
+         }
+    }, 1000)
 
     amiya.velocity.x = 0
 
