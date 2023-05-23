@@ -5,6 +5,7 @@
 
 canvas{
     padding: 0.5px;
+    color: #7d7d7d;
 }
 
 .fullcanvas {
@@ -20,25 +21,31 @@ canvas{
     padding: 20px;
 }
 
-.amiyahp {
-    background-color : yellow;
+.playerhp {
+    background-color : #c95757;
     height: 30px;
     width: 100%;
 }
 
-.icon {
-    background-color: red;
-    width: 100px;
-    height: 100px;
-    flex-shrink: 0;
-}
-
-
 .hpbg {
     position: absolute;
-    background: blue;
+    background: #57c96e;
     top: 0;
     right: 0;
     bottom: 0;
     left: 0;
+}
+
+#displayText{
+    position: absolute;
+    color: white;
+    align-items: center;
+    justify-content: center;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    display: flex;
+    font-size: 50px;
+    font-family:"Lucida Console", "Courier New", monospace;
 }
